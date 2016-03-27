@@ -15,7 +15,7 @@ public class UserDaoTest {
         UserDao userDao = new UserDao();
 
         Long id = 1L;
-        String name = "허윤호";
+        String name = "현승호";
         String password = "1234";
 
         User user = userDao.get(id);
