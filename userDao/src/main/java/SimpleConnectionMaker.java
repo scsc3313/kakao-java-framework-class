@@ -2,10 +2,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Created by HSH on 2016. 4. 1..
- */
-public class JejuUserDao extends UserDao {
+public class SimpleConnectionMaker implements ConnectionMaker {
+
+    public SimpleConnectionMaker() {
+
+    }
+
     @Override
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
