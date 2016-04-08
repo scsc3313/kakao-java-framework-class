@@ -19,9 +19,8 @@ public class UserDao {
         try {
             conection = connectionMaker.getConnection();
 
-            String sql = "select * from userinfo where id = ?";
-            statement = conection.prepareStatement(sql);
-            statement.setLong(1, id);
+            StatementStrategy statementStrategy = new GetUserStatementStrategy(id);
+            statement = statementStrategy.makeStatement(conection);
 
             resultSet = statement.executeQuery();
             if(resultSet.next()){
@@ -68,10 +67,9 @@ public class UserDao {
         try {
             conection = connectionMaker.getConnection();
 
-            String sql = "insert into userinfo (name, password) values (?, ?)";
-            statement = conection.prepareStatement(sql);
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getPassword());
+            StatementStrategy statementStrategy = new AddUserStatementStrategy(user);
+            statement = statementStrategy.makeStatement(conection);
+
             statement.executeUpdate();
 
             id = getLastInsertId(conection);
@@ -100,50 +98,26 @@ public class UserDao {
     }
 
     public void delete(Long id) throws ClassNotFoundException, SQLException {
-        Connection conection = null;
-        PreparedStatement statement = null;
-        try {
-            conection = connectionMaker.getConnection();
-
-            String sql = "delete from userinfo where id = ?";
-            statement = conection.prepareStatement(sql);
-            statement.setLong(1, id);
-            statement.executeUpdate();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if(statement != null)
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            if(conection != null)
-                try {
-                    conection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-        }
+        StatementStrategy statementStrategy = new DeleteUserStatementStrategy(id);
+        jdbcContextWithStatementForStateStrategy(statementStrategy);
 
     }
 
     public void update(User user) throws ClassNotFoundException, SQLException {
+        StatementStrategy statementStrategy = new UpdateUserStatementStateStrategy(user);
+        jdbcContextWithStatementForStateStrategy(statementStrategy);
+    }
+
+    private void jdbcContextWithStatementForStateStrategy(StatementStrategy statementStrategy) throws ClassNotFoundException, SQLException {
         Connection conection = null;
         PreparedStatement statement = null;
         try {
             conection = connectionMaker.getConnection();
 
-            String sql = "update userinfo set name = ?, password = ? where id = ?";
-            statement = conection.prepareStatement(sql);
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getPassword());
-            statement.setLong(3, user.getId());
+
+            statement = statementStrategy.makeStatement(conection);
+
+
             statement.executeUpdate();
 
         } catch (ClassNotFoundException e) {
