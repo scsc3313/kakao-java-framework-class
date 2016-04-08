@@ -133,6 +133,41 @@ public class UserDao {
 
     }
 
+    public void update(User user) throws ClassNotFoundException, SQLException {
+        Connection conection = null;
+        PreparedStatement statement = null;
+        try {
+            conection = connectionMaker.getConnection();
+
+            String sql = "update userinfo set name = ?, password = ? where id = ?";
+            statement = conection.prepareStatement(sql);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.setLong(3, user.getId());
+            statement.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(statement != null)
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            if(conection != null)
+                try {
+                    conection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
     private Long getLastInsertId(Connection conection) throws SQLException {
         PreparedStatement lastInsertIdStatement = conection.prepareStatement("select last_insert_id()");
         ResultSet resultSet = lastInsertIdStatement.executeQuery();
