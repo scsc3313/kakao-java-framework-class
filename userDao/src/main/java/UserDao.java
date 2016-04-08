@@ -24,12 +24,12 @@ public class UserDao {
             statement.setLong(1, id);
 
             resultSet = statement.executeQuery();
-            resultSet.next();
-
-            user = new User();
-            user.setId(resultSet.getLong("id"));
-            user.setName(resultSet.getString("name"));
-            user.setPassword(resultSet.getString("password"));
+            if(resultSet.next()){
+                user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPassword(resultSet.getString("password"));
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw e;
@@ -97,6 +97,40 @@ public class UserDao {
         }
 
         return id;
+    }
+
+    public void delete(Long id) throws ClassNotFoundException, SQLException {
+        Connection conection = null;
+        PreparedStatement statement = null;
+        try {
+            conection = connectionMaker.getConnection();
+
+            String sql = "delete from userinfo where id = ?";
+            statement = conection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(statement != null)
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            if(conection != null)
+                try {
+                    conection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+
     }
 
     private Long getLastInsertId(Connection conection) throws SQLException {
