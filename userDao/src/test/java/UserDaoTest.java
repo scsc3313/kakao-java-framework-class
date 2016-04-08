@@ -1,4 +1,7 @@
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
@@ -10,21 +13,24 @@ import static org.hamcrest.core.Is.*;
  */
 public class UserDaoTest {
 
+    private UserDao userDao;
+
+    @Before
+    public void setup(){
+        ApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(DaoFactory.class);
+        userDao = (UserDao) applicationContext.getBean("userDao");
+    }
+
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-//        UserDao userDao = new UserDao(new SimpleConnectionMaker());
-
-        UserDao userDao = new DaoFactory().getUserDao();
-
         Long id = 1L;
         String name = "현승호";
         String password = "1234";
 
         User user = userDao.get(id);
 
-        assertThat(user.getId(), is(id));
-        assertThat(user.getName(), is(name));
-        assertThat(user.getPassword(), is(password));
+        validate(id, name, password, user);
     }
 
     @Test
@@ -39,14 +45,17 @@ public class UserDaoTest {
         user.setPassword(password);
 
 //        UserDao userDao = new UserDao(new SimpleConnectionMaker());
-        UserDao userDao = new DaoFactory().getUserDao();
         Long id = userDao.add(user);
 
         User resultUser = userDao.get(id);
-        assertThat(resultUser.getId() , is(id));
-        assertThat(resultUser.getName() , is(name));
-        assertThat(resultUser.getPassword() , is(password));
+        validate(id, name, password, resultUser);
 
+    }
+
+    private void validate(Long id, String name, String password, User user) {
+        assertThat(user.getId(), is(id));
+        assertThat(user.getName(), is(name));
+        assertThat(user.getPassword(), is(password));
     }
 
 }
