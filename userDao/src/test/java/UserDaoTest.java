@@ -1,12 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.core.Is.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Created by HSH on 2016. 3. 25..
@@ -18,7 +18,9 @@ public class UserDaoTest {
     @Before
     public void setup(){
         ApplicationContext applicationContext =
-                new AnnotationConfigApplicationContext(DaoFactory.class);
+                new GenericXmlApplicationContext("daoFactory.xml");
+//        ApplicationContext applicationContext =
+//                new AnnotationConfigApplicationContext(DaoFactory.class);
         userDao = (UserDao) applicationContext.getBean("userDao");
     }
 
