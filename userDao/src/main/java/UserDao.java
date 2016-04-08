@@ -12,41 +12,89 @@ public class UserDao {
 
     public User get(Long id) throws SQLException, ClassNotFoundException {
 
-        Connection conection = connectionMaker.getConnection();
+        Connection conection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        User user = null;
+        try {
+            conection = connectionMaker.getConnection();
 
-        String sql = "select * from userinfo where id = ?";
-        PreparedStatement statement = conection.prepareStatement(sql);
-        statement.setLong(1, id);
+            String sql = "select * from userinfo where id = ?";
+            statement = conection.prepareStatement(sql);
+            statement.setLong(1, id);
 
-        ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
+            resultSet = statement.executeQuery();
+            resultSet.next();
 
-        User user = new User();
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
-        user.setPassword(resultSet.getString("password"));
-
-        resultSet.close();
-        statement.close();
-        conection.close();
+            user = new User();
+            user.setId(resultSet.getLong("id"));
+            user.setName(resultSet.getString("name"));
+            user.setPassword(resultSet.getString("password"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(resultSet != null)
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            if (statement != null)
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            if(conection != null)
+                try {
+                    conection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
 
         return user;
     }
 
     public Long add(User user) throws ClassNotFoundException, SQLException {
 
-        Connection conection = connectionMaker.getConnection();
+        Connection conection = null;
+        PreparedStatement statement = null;
+        Long id = null;
+        try {
+            conection = connectionMaker.getConnection();
 
-        String sql = "insert into userinfo (name, password) values (?, ?)";
-        PreparedStatement statement = conection.prepareStatement(sql);
-        statement.setString(1, user.getName());
-        statement.setString(2, user.getPassword());
-        statement.executeUpdate();
+            String sql = "insert into userinfo (name, password) values (?, ?)";
+            statement = conection.prepareStatement(sql);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.executeUpdate();
 
-        Long id = getLastInsertId(conection);
-
-        statement.close();
-        conection.close();
+            id = getLastInsertId(conection);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(statement != null)
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            if(conection != null)
+                try {
+                    conection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
 
         return id;
     }
