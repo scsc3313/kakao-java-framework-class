@@ -1,3 +1,5 @@
+package statement;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -5,19 +7,18 @@ import java.sql.SQLException;
 /**
  * Created by HSH on 2016. 4. 8..
  */
-public class AddUserStatementStrategy implements StatementStrategy {
-    private User user;
+public class GetUserStatementStrategy implements StatementStrategy {
+    private Long id;
 
-    public AddUserStatementStrategy(User user) {
-        this.user = user;
+    public GetUserStatementStrategy(Long id) {
+        this.id = id;
     }
 
     @Override
     public PreparedStatement makeStatement(Connection connection) throws SQLException {
-        String sql = "insert into userinfo (name, password) values (?, ?)";
+        String sql = "select * from userinfo where id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, user.getName());
-        statement.setString(2, user.getPassword());
+        statement.setLong(1, id);
         return statement;
     }
 }

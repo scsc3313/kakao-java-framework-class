@@ -5,10 +5,10 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
-    <bean id="userDao" class="UserDao">
+    <bean id="userDao" class="dao.UserDao">
         <constructor-arg ref="connectionMaker"/>
     </bean>
 
-    <bean id="connectionMaker" class="SimpleConnectionMaker"></bean>
+    <bean id="connectionMaker" class="connection.SimpleConnectionMaker"></bean>
 
 </beans>

@@ -1,3 +1,5 @@
+import dao.UserDao;
+import model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +22,7 @@ public class UserDaoTest {
         ApplicationContext applicationContext =
                 new GenericXmlApplicationContext("daoFactory.xml");
 //        ApplicationContext applicationContext =
-//                new AnnotationConfigApplicationContext(DaoFactory.class);
+//                new AnnotationConfigApplicationContext(factory.DaoFactory.class);
         userDao = (UserDao) applicationContext.getBean("userDao");
     }
 
@@ -46,7 +48,7 @@ public class UserDaoTest {
         user.setName(name);
         user.setPassword(password);
 
-//        UserDao userDao = new UserDao(new SimpleConnectionMaker());
+//        dao.UserDao userDao = new dao.UserDao(new connection.SimpleConnectionMaker());
         Long id = userDao.add(user);
 
         User resultUser = userDao.get(id);
@@ -65,7 +67,7 @@ public class UserDaoTest {
         user.setName(name);
         user.setPassword(password);
 
-//        UserDao userDao = new UserDao(new SimpleConnectionMaker());
+//        dao.UserDao userDao = new dao.UserDao(new connection.SimpleConnectionMaker());
         Long id = userDao.add(user);
 
         userDao.delete(id);
@@ -85,7 +87,7 @@ public class UserDaoTest {
         user.setName(name);
         user.setPassword(password);
 
-//        UserDao userDao = new UserDao(new SimpleConnectionMaker());
+//        dao.UserDao userDao = new dao.UserDao(new connection.SimpleConnectionMaker());
         Long id = userDao.add(user);
 
         name = "김철수";
