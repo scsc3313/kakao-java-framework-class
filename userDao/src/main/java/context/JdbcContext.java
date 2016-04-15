@@ -1,19 +1,19 @@
 package context;
 
-import connection.ConnectionMaker;
 import model.User;
 import statement.StatementStrategy;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JdbcContext {
-    public final ConnectionMaker connectionMaker;
+    public DataSource dataSource;
 
-    public JdbcContext(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public JdbcContext(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public User jdbcContextWithStatementStrategyForQuery(StatementStrategy statementStrategy) throws ClassNotFoundException, SQLException {
@@ -22,7 +22,7 @@ public class JdbcContext {
         ResultSet resultSet = null;
         User user = null;
         try {
-            conection = connectionMaker.getConnection();
+            conection = dataSource.getConnection();
 
             statement = statementStrategy.makeStatement(conection);
 
@@ -33,9 +33,6 @@ public class JdbcContext {
                 user.setName(resultSet.getString("name"));
                 user.setPassword(resultSet.getString("password"));
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -67,16 +64,13 @@ public class JdbcContext {
         PreparedStatement statement = null;
         Long id = null;
         try {
-            conection = connectionMaker.getConnection();
+            conection = dataSource.getConnection();
 
             statement = statementStrategy.makeStatement(conection);
 
             statement.executeUpdate();
 
             id = getLastInsertId(conection);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -101,7 +95,7 @@ public class JdbcContext {
         Connection conection = null;
         PreparedStatement statement = null;
         try {
-            conection = connectionMaker.getConnection();
+            conection = dataSource.getConnection();
 
 
             statement = statementStrategy.makeStatement(conection);
@@ -109,9 +103,6 @@ public class JdbcContext {
 
             statement.executeUpdate();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;

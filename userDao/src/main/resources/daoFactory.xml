@@ -9,10 +9,15 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <property name="jdbcContext" ref="jdbcContext"></property>
     </bean>
 
-    <bean id="connectionMaker" class="connection.SimpleConnectionMaker"></bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/jejunu"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+    </bean>
 
     <bean id="jdbcContext" class="context.JdbcContext">
-        <constructor-arg ref="connectionMaker"></constructor-arg>
+        <constructor-arg ref="dataSource"></constructor-arg>
     </bean>
 
 </beans>

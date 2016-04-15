@@ -42,8 +42,6 @@ public class UserDao {
         jdbcContext.update(sql, params);
     }
 
-
-
     public void setJdbcContext(JdbcContext jdbcContext) {
         this.jdbcContext = jdbcContext;
     }
