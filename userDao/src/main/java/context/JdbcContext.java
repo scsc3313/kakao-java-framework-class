@@ -143,4 +143,15 @@ public class JdbcContext {
         lastInsertIdStatement.close();
         return id;
     }
+
+    public void update(String sql, Object[] params) throws ClassNotFoundException, SQLException {
+        StatementStrategy statementStrategy = (Connection connection) -> {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            for (int i = 1; i <= params.length; i++) {
+                statement.setObject(i, params[i - 1]);
+            }
+            return statement;
+        };
+        jdbcContextWithStatementForStateStrategy(statementStrategy);
+    }
 }

@@ -4,6 +4,8 @@ import context.JdbcContext;
 import model.User;
 import statement.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -13,7 +15,12 @@ public class UserDao {
     private JdbcContext jdbcContext;
 
     public User get(Long id) throws SQLException, ClassNotFoundException {
-        StatementStrategy statementStrategy = new GetUserStatementStrategy(id);
+        StatementStrategy statementStrategy = (Connection connection) -> {
+            String sql = "select * from userinfo where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            return statement;
+        };
         return jdbcContext.jdbcContextWithStatementStrategyForQuery(statementStrategy);
     }
 
@@ -23,15 +30,19 @@ public class UserDao {
     }
 
     public void delete(Long id) throws ClassNotFoundException, SQLException {
-        StatementStrategy statementStrategy = new DeleteUserStatementStrategy(id);
-        jdbcContext.jdbcContextWithStatementForStateStrategy(statementStrategy);
+        String sql = "delete from userinfo where id = ?";
+        Object[] params = new Object[]{id};
+        jdbcContext.update(sql, params);
 
     }
 
     public void update(User user) throws ClassNotFoundException, SQLException {
-        StatementStrategy statementStrategy = new UpdateUserStatementStateStrategy(user);
-        jdbcContext.jdbcContextWithStatementForStateStrategy(statementStrategy);
+        String sql = "update userinfo set name = ?, password = ? where id = ?";
+        Object[] params = new Object[]{user.getName(), user.getPassword(), user.getId()};
+        jdbcContext.update(sql, params);
     }
+
+
 
     public void setJdbcContext(JdbcContext jdbcContext) {
         this.jdbcContext = jdbcContext;
