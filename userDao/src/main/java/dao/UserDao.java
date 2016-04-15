@@ -1,48 +1,70 @@
 package dao;
 
-import context.JdbcContext;
 import model.User;
-import statement.*;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by HSH on 2016. 3. 25..
  */
 public class UserDao {
-    private JdbcContext jdbcContext;
+    private JdbcTemplate jdbcTemplate;
 
     public User get(Long id) throws SQLException, ClassNotFoundException {
-        StatementStrategy statementStrategy = (Connection connection) -> {
-            String sql = "select * from userinfo where id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setLong(1, id);
-            return statement;
-        };
-        return jdbcContext.jdbcContextWithStatementStrategyForQuery(statementStrategy);
+        String sql = "select * from userinfo where id = ?";
+        User user = null;
+        try {
+            user = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<User>() {
+                @Override
+                public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    User user = new User();
+                    user.setId(rs.getLong("id"));
+                    user.setName(rs.getString("name"));
+                    user.setPassword(rs.getString("password"));
+                    return user;
+                }
+            });
+        } catch (EmptyResultDataAccessException e) {
+        }
+
+        return user;
     }
 
     public Long add(User user) throws ClassNotFoundException, SQLException {
-        StatementStrategy statementStrategy = new AddUserStatementStrategy(user);
-        return jdbcContext.jdbcContextWithStateStrategyForInsert(statementStrategy);
+        String sql = "insert into userinfo (name, password) values (?, ?)";
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, user.getName());
+                statement.setString(2, user.getPassword());
+                return statement;
+            }
+        };
+        jdbcTemplate.update(psc,generatedKeyHolder);
+        return (Long) generatedKeyHolder.getKey();
     }
 
     public void delete(Long id) throws ClassNotFoundException, SQLException {
         String sql = "delete from userinfo where id = ?";
         Object[] params = new Object[]{id};
-        jdbcContext.update(sql, params);
+        jdbcTemplate.update(sql, params);
 
     }
 
     public void update(User user) throws ClassNotFoundException, SQLException {
         String sql = "update userinfo set name = ?, password = ? where id = ?";
         Object[] params = new Object[]{user.getName(), user.getPassword(), user.getId()};
-        jdbcContext.update(sql, params);
+        jdbcTemplate.update(sql, params);
     }
 
-    public void setJdbcContext(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }
