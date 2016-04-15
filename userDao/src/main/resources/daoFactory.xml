@@ -6,9 +6,13 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 
 
     <bean id="userDao" class="dao.UserDao">
-        <constructor-arg ref="connectionMaker"/>
+        <property name="jdbcContext" ref="jdbcContext"></property>
     </bean>
 
     <bean id="connectionMaker" class="connection.SimpleConnectionMaker"></bean>
+
+    <bean id="jdbcContext" class="context.JdbcContext">
+        <constructor-arg ref="connectionMaker"></constructor-arg>
+    </bean>
 
 </beans>
