@@ -38,14 +38,11 @@ public class UserDao {
     public Long add(User user) throws ClassNotFoundException, SQLException {
         String sql = "insert into userinfo (name, password) values (?, ?)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        PreparedStatementCreator psc = (Connection con) -> {
                 PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, user.getName());
                 statement.setString(2, user.getPassword());
                 return statement;
-            }
         };
         jdbcTemplate.update(psc,generatedKeyHolder);
         return (Long) generatedKeyHolder.getKey();
