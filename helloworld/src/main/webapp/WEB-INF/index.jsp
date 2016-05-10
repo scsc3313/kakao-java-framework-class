@@ -4,6 +4,6 @@
     <title>Index</title>
 </head>
 <body>
-hello~ index
+<h1>hello~ index</h1>
 </body>
 </html>
