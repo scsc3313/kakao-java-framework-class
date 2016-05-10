@@ -1,9 +1,18 @@
+package kr.ac.jejunu;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * Created by HSH on 2016. 5. 9..
  */
+@Component
 public class HelloPersonImpl implements HelloPerson {
 
+    @Autowired
     private Hello hello;
+    @Value("현승호")
     private String name;
 
     public Hello getHello() {

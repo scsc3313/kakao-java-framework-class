@@ -1,3 +1,7 @@
+import kr.ac.jejunu.Hello;
+import kr.ac.jejunu.HelloImpl;
+import kr.ac.jejunu.HelloPerson;
+import kr.ac.jejunu.HelloPersonImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -24,7 +28,7 @@ public class StaticApplicationContextTest {
     @Test
     public void applicationContext() {
         Hello hello = applicationContext.getBean("hello", Hello.class);
-        assertThat(hello.sayHello(), is("Hello~"));
+        assertThat(hello.sayHello(), is("kr.ac.jejunu.Hello~"));
     }
 
     @Test
@@ -34,6 +38,6 @@ public class StaticApplicationContextTest {
         beanDefinition.getPropertyValues().addPropertyValue("hello", new RuntimeBeanReference("hello"));
         applicationContext.registerBeanDefinition("helloPerson", beanDefinition);
         HelloPerson helloPerson = applicationContext.getBean("helloPerson", HelloPerson.class);
-        assertThat(helloPerson.sayHello(), is("Hello~ 현승호"));
+        assertThat(helloPerson.sayHello(), is("kr.ac.jejunu.Hello~ 현승호"));
     }
 }

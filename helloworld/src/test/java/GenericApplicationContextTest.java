@@ -1,3 +1,4 @@
+import kr.ac.jejunu.HelloPerson;
 import org.junit.Test;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
@@ -17,6 +18,6 @@ public class GenericApplicationContextTest {
         reader.loadBeanDefinitions("applicationContext.xml");
         applicationContext.refresh();
         HelloPerson helloPerson = applicationContext.getBean("helloPerson", HelloPerson.class);
-        assertThat(helloPerson.sayHello(), is("Hello~ 현승호"));
+        assertThat(helloPerson.sayHello(), is("kr.ac.jejunu.Hello~ 현승호"));
     }
 }

@@ -1,9 +1,14 @@
+package kr.ac.jejunu;
+
+import org.springframework.stereotype.Component;
+
 /**
  * Created by HSH on 2016. 5. 9..
  */
+@Component("hello")
 public class HelloImpl implements Hello{
     @Override
     public String sayHello() {
-        return "Hello~";
+        return "kr.ac.jejunu.Hello~";
     }
 }
