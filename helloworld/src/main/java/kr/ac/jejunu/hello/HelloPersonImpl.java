@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.hello;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

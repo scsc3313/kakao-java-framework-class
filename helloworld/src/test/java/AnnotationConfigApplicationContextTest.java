@@ -1,5 +1,5 @@
-import kr.ac.jejunu.Hello;
-import kr.ac.jejunu.HelloPerson;
+import kr.ac.jejunu.hello.Hello;
+import kr.ac.jejunu.hello.HelloPerson;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -23,18 +23,18 @@ public class AnnotationConfigApplicationContextTest {
     @Test
     public void applicationContext(){
         Hello hello = applicationContext.getBean("hello", Hello.class);
-        assertThat(hello.sayHello(), is("kr.ac.jejunu.Hello~"));
+        assertThat(hello.sayHello(), is("kr.ac.jejunu.hello.Hello~"));
     }
 
     @Test
     public void applicationContextUsingClass(){
         Hello hello = applicationContext.getBean(Hello.class);
-        assertThat(hello.sayHello(), is("kr.ac.jejunu.Hello~"));
+        assertThat(hello.sayHello(), is("kr.ac.jejunu.hello.Hello~"));
     }
 
     @Test
     public void applicationContextUsingDi(){
         HelloPerson helloPerson = applicationContext.getBean(HelloPerson.class);
-        assertThat(helloPerson.sayHello(), is("kr.ac.jejunu.Hello~ 현승호"));
+        assertThat(helloPerson.sayHello(), is("kr.ac.jejunu.hello.Hello~ 현승호"));
     }
 }

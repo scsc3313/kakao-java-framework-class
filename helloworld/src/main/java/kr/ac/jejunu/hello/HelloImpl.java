@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.hello;
 
 import org.springframework.stereotype.Component;
 
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class HelloImpl implements Hello{
     @Override
     public String sayHello() {
-        return "kr.ac.jejunu.Hello~";
+        return "kr.ac.jejunu.hello.Hello~";
     }
 }
