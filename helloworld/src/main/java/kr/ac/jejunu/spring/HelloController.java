@@ -16,8 +16,6 @@ public class HelloController {
     @RequestMapping("/hello")
     public void hello(Model model){
         model.addAttribute("Request Mapping!");
-        model.addAttribute(1);
-        model.addAttribute("name", "현승호");
     }
 
     @RequestMapping(path = "/hello/{name}", method = RequestMethod.GET)
