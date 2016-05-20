@@ -11,6 +11,8 @@
     <title>Hello</title>
 </head>
 <body>
-<h1>Hello.jsp</h1>
+<h1>${string}</h1>
+<h1>${integer}</h1>
+<h1>${name}</h1>
 </body>
 </html>
