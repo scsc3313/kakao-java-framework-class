@@ -1,9 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
-<head>
-    <title>Hello</title>
-</head>
 <body>
-<h1>${string}</h1>
+    <h1>${string}</h1>
 </body>
 </html>

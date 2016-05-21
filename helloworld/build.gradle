@@ -5,6 +5,7 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
         classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.4'
     }
@@ -37,15 +38,18 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'org.springframework', name: 'spring-context', version: springVersion
     compile group: 'org.springframework', name: 'spring-jdbc', version: springVersion
-    compile group: 'org.springframework', name: 'spring-webmvc', version: springVersion
     compile group: 'org.springframework', name: 'spring-oxm', version: springVersion
+    compile group: 'org.springframework', name: 'spring-webmvc', version: springVersion
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: servletVersion
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
     compile group: 'org.codehaus.castor', name: 'castor-core', version: castorVersion
     compile group: 'org.codehaus.castor', name: 'castor-xml', version: castorVersion
-    runtime group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    runtime group: 'ch.qos.logback', name: 'logback-classic', version:logbackVersion
+
+
+
 }
 
 tomcat {
@@ -56,3 +60,4 @@ tomcat {
 tomcatRun {
     reloadable = true
 }
+
