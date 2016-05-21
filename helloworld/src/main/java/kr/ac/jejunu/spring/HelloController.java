@@ -95,5 +95,12 @@ public class HelloController {
         return "/spring/hellomodel";
     }
 
+    @RequestMapping("/returnmodel")
+    public HelloModel hello11(){
+        HelloModel model = new HelloModel();
+        model.setHello("hi");
+        model.setName("Seungho");
+        return model;
+    }
 
 }
